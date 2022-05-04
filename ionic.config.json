@@ -1,0 +1,7 @@
+{
+  "name": "mentor-new",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

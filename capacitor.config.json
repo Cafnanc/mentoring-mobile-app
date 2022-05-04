@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "mentor-new",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
