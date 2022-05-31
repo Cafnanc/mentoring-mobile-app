@@ -1,0 +1,54 @@
+<app-page-header [config]="headerConfig">
+  <ion-row class="header-bottom-border ion-padding ion-margin-top">
+    <h3>
+      {{'WELCOME'| translate}} {{ user?.name }}
+    </h3>
+    <ion-col class="margin" size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
+    <ion-col size="12" class="ion-no-padding">
+      <div>
+        <ion-item lines="none" color="primary">
+          <ion-searchbar placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (click)="search()"></ion-searchbar>
+        </ion-item>
+      </div>
+    </ion-col>
+  </ion-row>
+</app-page-header>
+<ion-content>
+  <div *ngIf="sessions">
+    <div class="page-intro" *ngIf="sessions?.allSessions?.length">
+      <h5>
+        {{"ALL_SESSIONS" | translate}}
+      </h5>
+      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
+        (click)="viewMore('all-sessions')">
+        {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+    <div *ngFor="let session of sessions?.allSessions">
+      <app-session-card [data]="session" [action]="'ENROLL'" [status]="status" (onClickEvent)="eventAction($event)">
+      </app-session-card>
+    </div>
+    <div *ngIf="sessions?.mySessions?.length">
+      <div class="page-intro">
+        <h5>
+          {{"MY_SESSIONS" | translate}}
+        </h5>
+        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
+          (click)="viewMore('my-sessions')">
+          {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
+        </ion-button>
+      </div>
+      <ion-row>
+        <ion-col size="6" *ngFor="let session of sessions?.mySessions">
+          <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+  <div *ngIf="!sessions">
+    <app-skeleton [type]="SKELETON.HOME_SKELETON" [repetition]="4"></app-skeleton>
+  </div>
+  <div *ngIf="sessions && !sessions?.allSessions?.length && !sessions?.mySessions?.length">
+    <app-no-data-found [message]="'NO_ACTIVE_SESSIONS'"> </app-no-data-found>
+  </div>
+</ion-content>

@@ -1,0 +1,58 @@
+.session-card{
+    padding: 10px;
+    .card-avatar{
+    text-align: center;
+    margin: auto 0px 3px;
+    .thumbnail-image{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    }
+    .status-badge{
+        background: var(--ion-color-primary);
+        min-width: 60px;
+        color: var(--white);
+        padding: 2px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        ion-icon{
+            font-size: 10px;
+            padding: 0px 5px;
+        }
+    }
+    h5{
+        margin-bottom: 5px;
+        margin-top: 0px;
+        font-size: 16px;
+        color:var(--black);
+    }
+    p{
+        margin: 6px 0px 0px 0px;
+    }
+  .session-actions{
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.session-enroll{
+    margin-top: -15px;
+    color: var(--ion-color-primary);
+    }
+
+.text-align{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}  
+.ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    font-size: small;
+    white-space: nowrap;
+}
+.margin-btm-10{
+    margin-bottom: 10px;  
+}
