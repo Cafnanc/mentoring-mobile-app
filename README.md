@@ -11,32 +11,39 @@ CONTENTS OF THIS FILE
 
 DEPENDENCIES
 ---------------------
- * Ionic:
+* Ionic:
 
-   Ionic CLI                     : 6.19.0 (/usr/local/lib/node_modules/@ionic/cli)
-   Ionic Framework               : @ionic/angular 6.1.3
+   Ionic CLI                     : 6.19.1 (/usr/local/lib/node_modules/@ionic/cli)
+   Ionic Framework               : @ionic/angular 6.1.7
    @angular-devkit/build-angular : 13.2.6
    @angular-devkit/schematics    : 13.2.6
    @angular/cli                  : 13.2.6
    @ionic/angular-toolkit        : 6.1.0
 
- * Capacitor:
+* Capacitor:
 
    Capacitor CLI      : 3.5.1
    @capacitor/android : 3.5.0
    @capacitor/core    : 3.5.1
    @capacitor/ios     : 3.5.0
 
- * Utility:
+* Cordova:
 
-   cordova-res                          : 0.15.4
-   native-run (update available: 1.6.0) : 1.5.0
+   Cordova CLI       : 11.0.0
+   Cordova Platforms : none
+   Cordova Plugins   : no whitelisted plugins (0 plugins total)
 
- * System:
+* Utility:
 
-   NodeJS : v14.19.0 (/usr/local/bin/node)
-   npm    : 6.14.16
-   OS     : Linux 5.13
+   cordova-res : 0.15.4
+   native-run  : 1.6.0
+
+* System:
+
+   Android SDK Tools : 26.1.1 (/home/afnan/Android/Sdk)
+   NodeJS            : v14.19.0 (/usr/local/bin/node)
+   npm               : 6.14.16
+   OS                : Linux 5.13
 
 
 IONIC-ANDROID BUILD SETUP
@@ -76,9 +83,10 @@ BUILD APK
 ---------------------
 
 - To check attached devices do adb devices
-- ionic build (Make sure you have attached device)
-- ionic cap sync
-- ionic capacitor run android --prod
+- Run ionic build (Make sure you have attached device)
+- Run npx cap sync
+- Run ionic cap sync
+- Run ionic capacitor run android --prod
 - Apk location project_folder/platforms/android/app/build/outputs/apk/debug/apk_name.apk
 
 
