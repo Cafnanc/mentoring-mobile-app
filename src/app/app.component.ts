@@ -19,7 +19,8 @@ import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 export class AppComponent {
  user;
   public appPages = [
-    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
+    { title: 'CREATED_SESSIONS', icon: 'person-add' },
+    { title: 'LANGUAGES', action: "selectLanguage" }
   ];
 
   public mentorMenu=[
@@ -27,6 +28,7 @@ export class AppComponent {
   ]
 
   isMentor:boolean
+  showAlertBox = false;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -156,6 +158,25 @@ export class AppComponent {
   goToProfilePage(){
     this.menuCtrl.close();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+  }
+
+  async menuItemAction(menu) {
+    switch (menu.title) {
+      case 'LANGUAGE': {
+        this.alert.create({
+          
+        })
+        break;
+      }
+      case 'CREATED_SESSIONS': {
+        this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
+        break;
+      }
+    }
+  }
+
+  async showAlert(alertData){
+    
   }
 
 }
