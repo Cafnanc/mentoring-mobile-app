@@ -201,6 +201,17 @@ ion-button{
   font-weight: bold;
   font-size: 12px;
   padding: 6px 21px;
+  width: 81px;
+  .alert-button-inner{
+    justify-content: center;
+    white-space: nowrap;
+  }
+}
+.alert-button{
+  background-color: var(--ion-color-primary);
+  span{
+    text-transform: none;
+  }
 }
 .alert-button-red.sc-ion-alert-md{
   text-transform: none !important;
@@ -211,6 +222,11 @@ ion-button{
   font-weight: bold;
   font-size: 12px;
   padding: 6px 21px;
+  width: 81px;
+  .alert-button-inner{
+    justify-content: center;
+    white-space: nowrap;
+  }
 }
 .links{
   text-decoration: none;

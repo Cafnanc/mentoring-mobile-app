@@ -60,13 +60,13 @@ export class AppComponent {
             {
               text: texts['CANCEL'],
               role: 'cancel',
-              cssClass: "alert-button",
+              cssClass: "alert-button-white",
               handler: () => { }
             },
             {
               text: texts['CONFIRM'],
               role: 'confirm',
-              cssClass: "alert-button",
+              cssClass: "alert-button-red",
               handler: () => { 
                 navigator['app'].exitApp();
               }
@@ -161,24 +161,4 @@ export class AppComponent {
     this.menuCtrl.close();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
-
-  async menuItemAction(menu) {
-    switch (menu.title) {
-      case 'LANGUAGE': {
-        this.alert.create({
-          
-        })
-        break;
-      }
-      case 'CREATED_BY_ME': {
-        this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
-        break;
-      }
-    }
-  }
-
-  async showAlert(alertData){
-    
-  }
-
 }
