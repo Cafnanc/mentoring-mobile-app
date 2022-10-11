@@ -43,6 +43,7 @@ export class CreateSessionPage implements OnInit {
   public formData: JsonFormData;
   showForm: boolean = false;
   isSubmited: boolean;
+  lastUploadedImage: boolean;
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -136,6 +137,9 @@ export class CreateSessionPage implements OnInit {
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
           this.location.back()
+        } else {
+          this.profileImageData.image = this.lastUploadedImage;
+          this.profileImageData.isUploaded = false;
         }
       }
     } else {
@@ -183,7 +187,7 @@ export class CreateSessionPage implements OnInit {
 
   imageUploadEvent(event) {
     this.localImage = event;
-    this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
+    this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
   }
 
