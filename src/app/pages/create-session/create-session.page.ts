@@ -25,6 +25,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
   styleUrls: ['./create-session.page.scss'],
 })
 export class CreateSessionPage implements OnInit {
+  lastUploadedImage;
   private win: any = window;
   @ViewChild('form1') form1: DynamicFormComponent;
   id: any = null;
@@ -43,7 +44,6 @@ export class CreateSessionPage implements OnInit {
   public formData: JsonFormData;
   showForm: boolean = false;
   isSubmited: boolean;
-  lastUploadedImage: boolean;
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -137,7 +137,7 @@ export class CreateSessionPage implements OnInit {
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
           this.location.back()
-        } else {
+        }else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
         }
@@ -189,6 +189,7 @@ export class CreateSessionPage implements OnInit {
     this.localImage = event;
     this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
+  
   }
 
   imageRemoveEvent(event){
