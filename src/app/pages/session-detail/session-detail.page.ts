@@ -6,6 +6,8 @@ import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Location } from '@angular/common';
+import { AnimationController } from '@ionic/angular';
+import { SafeHtmlPipe } from '../../shared/safe-html.pipe';
 
 @Component({
   selector: 'app-session-detail',
@@ -20,10 +22,14 @@ export class SessionDetailPage implements OnInit {
   isEnabled: boolean;
   startDate: any;
   endDate: any;
+  // summaryLink: any='https://docs.google.com/document/d/1mDiiRXr9PQmRF4VRvP900jpnmfPVMIQ5bkXnONT-5lU/edit#heading=h.pwbsjfwu47c8'
+  summaryLink: any = 'https://www.google.co.in/'
+  discordLink: any = 'https://web.whatsapp.com/'
+  showSummary:boolean = false
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService,private animationCtrl: AnimationController) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {}
@@ -229,4 +235,39 @@ export class SessionDetailPage implements OnInit {
       }
     }).catch(error => { })
   }
+
+  enterAnimation = (baseEl: HTMLElement) => {
+    const root = baseEl.shadowRoot;
+
+    const backdropAnimation = this.animationCtrl
+      .create()
+      .addElement(root.querySelector('ion-backdrop')!)
+      .fromTo('opacity', '0.01', 'var(--backdrop-opacity)');
+
+    const wrapperAnimation = this.animationCtrl
+      .create()
+      .addElement(root.querySelector('.modal-wrapper')!)
+      .keyframes([
+        { offset: 0, opacity: '0', transform: 'scale(0)' },
+        { offset: 1, opacity: '0.99', transform: 'scale(1)' },
+      ]);
+
+    return this.animationCtrl
+      .create()
+      .addElement(baseEl)
+      .easing('ease-out')
+      .duration(500)
+      .addAnimation([backdropAnimation, wrapperAnimation]);
+  };
+
+  leaveAnimation = (baseEl: HTMLElement) => {
+    return this.enterAnimation(baseEl).direction('reverse');
+  };
+
+
+  dismiss(){
+    this.showSummary=false
+  }
+
+
 }

@@ -168,5 +168,10 @@
     "CATEGORIES": "Categories",
     "MEDIUM": "Medium",
     "DON'T_DELETE": "Don't delete",
-    "YES_DELETE": "Yes delete"
+    "YES_DELETE": "Yes delete",
+    "SESSION_SUMMARY":"Summary",
+    "SESSION_DISCORD":"Discord",
+    "POST_SESSION":"Post session details",
+    "ADD_CREDENTIALS":"Add credentials",
+    "SESSION_TRANSCRIPT":"Transcript"
 }

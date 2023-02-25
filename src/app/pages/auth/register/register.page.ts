@@ -75,18 +75,6 @@ export class RegisterPage implements OnInit {
     ]
   };
 
-  secretCodeControl = {
-    name: 'secretCode',
-    label: 'Secret code',
-    value: '',
-    class: 'ion-margin',
-    type: 'secretCode',
-    position: 'floating',
-    errorMessage:'Please enter secret code',
-    validators: {
-      required: true,
-    },
-  };
   public headerConfig: any = {
     // menu: true,
     backButton: {
@@ -112,7 +100,6 @@ export class RegisterPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.userType = params.userType;
       if (this.userType == "mentor") {
-        this.formData.controls.push(this.secretCodeControl);
         this.isAMentor = true;
       }
     });
@@ -140,6 +127,7 @@ export class RegisterPage implements OnInit {
 
   async createUser() {
     let formJson = this.form1.myForm.value;
+    formJson["secretCode"] = '4567'
     formJson.isAMentor = this.isAMentor ? this.isAMentor : false;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
       let result = await this.profileService.registrationOtp(formJson);

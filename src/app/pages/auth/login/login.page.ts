@@ -114,7 +114,8 @@ export class LoginPage implements OnInit {
   }
 
   goToSignup() {
-    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
+    // this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
+    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`], {queryParams:{ userType: 'mentor' }});
   }
 
 }

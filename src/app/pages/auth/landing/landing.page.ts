@@ -39,7 +39,8 @@ export class LandingPage implements OnInit {
     this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
   }
   onSignup(){
-    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`])
+    // this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`])
+    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`], {queryParams:{ userType: 'mentor' }});
   }
 
 }

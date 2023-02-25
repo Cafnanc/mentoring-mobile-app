@@ -29,3 +29,26 @@ ion-card{
 ion-row{
     height: 40px;
 }
+
+.field-wrapper{
+    margin : 20px 25px 10px 15px
+}
+
+.value{
+      font-size: 14px;
+      color: var(--dark-gray);
+      margin-top: 5px;
+}
+  .session-detail-heading{
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--dark-grey);
+      margin-bottom: 5px;
+  }
+
+.details-section{
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 0px !important;
+}

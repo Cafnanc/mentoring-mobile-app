@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class GenericDetailsComponent implements OnInit {
   @Input() sessionData: any;
+  @Input() isProfile:any=false
 
   constructor() { }
   public isArray(arr:any ) {

@@ -12,6 +12,7 @@
       <div>
         <ion-label *ngIf="headerData?.name" class="name">{{headerData?.name}} </ion-label>
         <ion-label *ngIf="showRole&&headerData?.isAMentor" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
+        <ion-icon *ngIf="isAadhaarVerified" name="checkmark-circle" style="font-size: 20px;"></ion-icon>
         <ion-label *ngIf="showRole&&!headerData?.isAMentor" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
       </div>
       <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location?.length">
@@ -21,6 +22,76 @@
       <div *ngIf="buttonConfig">
         <ion-button color="Light" expand="block" fill="outline" shape="round" (click)="action(buttonConfig?.action)">{{ buttonConfig?.label | translate }}</ion-button>
       </div>
+      <ion-button *ngIf="showRole&&headerData?.isAMentor " color="Light" expand="block" fill="outline" shape="round" (click)="showCredentials=true">{{"ADD_CREDENTIALS"|translate}}</ion-button>
     </ion-col>
   </ion-row>
 </div>
+
+<ion-modal [isOpen]="showCredentials" [enterAnimation]="enterAnimation" [leaveAnimation]="leaveAnimation" class="credentials-modal" (didDismiss)="close()">
+  <ng-template>
+    <ion-header>
+        <div class="d-flex credentials-modal-header">
+          <ion-title>{{"ADD_CREDENTIALS"|translate}}</ion-title>
+          <ion-icon name="close-circle-outline" (click)="close()"></ion-icon>
+        </div>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-label class="ion-label" style="font-weight: 700;">Select a credential <span class="star-icon-red">*</span></ion-label>
+      <ion-select name="credentialType" [value]="credentialType" placeholder="Select" (ionChange)="onSelect($event)">
+        <ion-select-option *ngFor="let item of proofList" [value]="item.value">{{ item.name }}</ion-select-option>
+      </ion-select>
+    <div [ngSwitch]="credentialType">
+      <div class="credentials-form-section">
+        <div *ngSwitchCase="'id'">
+          <ion-label class="ion-label" style="font-weight: 700;">Select an id <span class="star-icon-red">*</span></ion-label>
+          <ion-select name="idType" [value]="idType" placeholder="Select" (ionChange)="onIdSelect($event)">
+            <ion-select-option *ngFor="let item1 of idsList" [value]="item1.value">{{ item1.name }}</ion-select-option>
+          </ion-select>
+          <!-- <div *ngIf="showForm">
+          <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form></div> -->
+          <div [ngSwitch]="idType">
+            <div *ngSwitchCase="'aadhaar'">
+              <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+            </div>
+            <div *ngSwitchCase="'digilocker'">
+              <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+            </div>
+            <div *ngSwitchCase="'voter'">
+              <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+            </div>
+            <div *ngSwitchCase="'license'">
+              <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+            </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="'skill'">
+          <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+        </div>
+        <div *ngSwitchCase="'work'">
+          <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+        </div>
+        <div (click)="selectFile()" class="document-upload d-flex" id="file">
+          <ion-icon name="cloud-upload"></ion-icon>
+          <div>Upload files</div>
+        </div>
+      </div>
+      <input id="upload" type="file" #file (change)="uploadFile($event)" style="display: none;">
+    </div>
+      <ion-button color="primary" expand="block"  shape="round" (click)="submit(verificationType)" [disabled]="!form1?.myForm?.valid">{{"ADD"|translate}}</ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+      <!-- <ion-radio-group class="d-flex" [value]="verificationType" (ionChange)="onSelect($event.target.value)">
+        <ion-item lines="none">
+          <ion-radio  value="aadhaar" [disabled]='isAadhaarVerified'></ion-radio>
+          <div class="radio-label">{{"AADHAAR"|translate}}</div>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-radio  value="digilocker"></ion-radio>
+          <div class="radio-label">{{"DIGILOCKER"|translate}}</div>
+        </ion-item>
+      </ion-radio-group> -->
+      <!-- <div>
+        <app-dynamic-form [jsonFormData]="formData" #form1 ></app-dynamic-form>
+      </div> -->
