@@ -13,6 +13,7 @@ import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class ProfileService {
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
       userDetails.user = null;
       let profileData = await this.getProfileDetailsAPI();
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, JSON.stringify(profileData));
       this.userService.userEvent.next(profileData);
       this.loaderService.stopLoader();
       this._location.back();
@@ -49,19 +50,22 @@ export class ProfileService {
       this.loaderService.stopLoader();
     }
   }
-  async getProfileDetailsAPI() {
+  getProfileDetailsAPI() {
     const config = {
       url: urlConstants.API_URLS.PROFILE_DETAILS,
       payload: {}
     };
-    try {
-      let data: any = await this.httpService.get(config);
-      data = _.get(data, 'result');
-      this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-      return data;
-    }
-    catch (error) {
-    }
+    // try {
+    return this.httpService.get(config).pipe(
+      map((data:any)=>{
+        data = _.get(data, 'result');
+        this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+        return data;
+      })
+    )
+    // }
+    // catch (error) {
+    // }
   }
 
   async profileDetails(showLoader = true): Promise<any> {
@@ -74,11 +78,14 @@ export class ProfileService {
               //showLoader ? this.loaderService.stopLoader() : null;
               resolve(data);
             } else {
-              var res = await this.getProfileDetailsAPI();
-              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-              data = _.get(data, 'user');
-             // showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
+              this.getProfileDetailsAPI().subscribe((res)=>{
+                this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
+                showLoader ? this.loaderService.stopLoader() : null;
+                data = _.get(data, 'user');
+                resolve(data);
+              })
+              // await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
+              // data = _.get(data, 'user');
             }
           })
       } catch (error) {
@@ -161,7 +168,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, JSON.stringify(data));
       return data;
     }
     catch (error) {

@@ -182,7 +182,7 @@ export class SessionDetailPage implements OnInit {
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {
-        let result = await this.sessionService.deleteSession(this.id);
+        let result:any = await this.sessionService.deleteSession(this.id);
         if (result.responseCode == "OK") {
           this.toast.showToast(result.message, "success");
           this._location.back();
@@ -198,7 +198,7 @@ export class SessionDetailPage implements OnInit {
   async onEnroll() {
     if (this.userDetails && this.userDetails.hasAcceptedTAndC) {
       if (this.userDetails?.about) {
-        let result = await this.sessionService.enrollSession(this.id);
+        let result:any = await this.sessionService.enrollSession(this.id);
         if (result?.result) {
           this.toast.showToast(result?.message, "success");
         }
@@ -227,7 +227,7 @@ export class SessionDetailPage implements OnInit {
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {
-        let result = await this.sessionService.unEnrollSession(this.id);
+        let result:any = await this.sessionService.unEnrollSession(this.id);
         if (result?.result) {
           this.toast.showToast(result?.message, "success");
         }

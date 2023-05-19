@@ -7,7 +7,7 @@ import { DashboardPage } from './dashboard.page';
 
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { SlReportsLibraryModule} from '@shikshalokam/sl-reports-library'
+// import { SlReportsLibraryModule} from '@shikshalokam/sl-reports-library'
 @NgModule({
   imports: [
     IonicModule,
@@ -16,7 +16,7 @@ import { SlReportsLibraryModule} from '@shikshalokam/sl-reports-library'
     RouterModule.forChild([{ path: '', component: DashboardPage }]),
     DashboardPageRoutingModule,
     SharedModule,
-    SlReportsLibraryModule
+    // SlReportsLibraryModule
   ],
   declarations: [DashboardPage],
 })

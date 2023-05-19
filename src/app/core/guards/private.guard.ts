@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
@@ -8,7 +8,7 @@ import { UserService } from '../services/user/user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class PrivateGuard implements CanActivate {
+export class PrivateGuard  {
   constructor(private userService:UserService,private router: Router){}
   canActivate(
     route: ActivatedRouteSnapshot,

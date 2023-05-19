@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+// import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
@@ -11,7 +11,7 @@ import { ISocialSharing } from '../../interface/soical-sharing-interface';
 })
 export class UtilService {
   constructor(
-    private socialSharing: SocialSharing,
+    // private socialSharing: SocialSharing,
     private alert: AlertController,
     private translate: TranslateService
   ) {}
@@ -22,7 +22,7 @@ export class UtilService {
 
   shareLink(param:ISocialSharing) {
     let {text,subject,link} = param;
-    this.socialSharing.share(text,subject,null,link);
+    // this.socialSharing.share(text,subject,null,link);
   }
 
   shareFile(param:ISocialSharing) {
@@ -31,12 +31,12 @@ export class UtilService {
     reader.readAsDataURL(file);
     reader.onload = () => {
       let base64: any = reader.result;
-      this.socialSharing
-        .share(text, file.name, base64,null)
-        .then(() => {
-        })
-        .catch(() => {
-        });
+      // this.socialSharing
+      //   .share(text, file.name, base64,null)
+      //   .then(() => {
+      //   })
+      //   .catch(() => {
+      //   });
     };
   }
 

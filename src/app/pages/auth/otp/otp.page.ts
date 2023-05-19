@@ -84,13 +84,13 @@ export class OtpPage implements OnInit {
   async onSubmit() {
     if (this.actionType == "signup") {
       this.signupData.otp = this.otp;
-      let result = await this.authService.createAccount(this.signupData);
+      let result:any = await this.authService.createAccount(this.signupData);
       if (result) {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
       }
     } else {
       this.resetPasswordData.otp = this.otp;
-      let response = await this.profileService.updatePassword(this.resetPasswordData);
+      let response:any = await this.profileService.updatePassword(this.resetPasswordData);
       if (response) {
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
       }

@@ -4,7 +4,7 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { Device } from '@awesome-cordova-plugins/device/ngx';
+// import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 @Component({
   selector: 'app-help',
@@ -32,13 +32,13 @@ export class HelpPage implements OnInit {
   };
   metaData: { deviceName: string; androidVersion: string; };
 
-  constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService, private device: Device) { }
+  constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService) { }
 
   ngOnInit() {
-    this.metaData = {
-      deviceName: this.device.model,
-      androidVersion: this.device.version
-    }
+    // this.metaData = {
+    //   deviceName: this.device.model,
+    //   androidVersion: this.device.version
+    // }
   }
 
   onSubmit() {
@@ -53,7 +53,7 @@ export class HelpPage implements OnInit {
       payload: this.form1.myForm.value
     };
     try {
-      let result = await this.httpService.post(config);
+      let result:any = await this.httpService.post(config);
       result?this.toast.showToast(result.message, "success"):this.toast.showToast(result.message, "danger");
       this.loaderService.stopLoader();
     }

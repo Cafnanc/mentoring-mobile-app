@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+// import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router) { }
 
 
   async createSession(formData, id?: string) {
@@ -20,7 +21,7 @@ export class SessionService {
       payload: formData
     };
     try {
-      let result = await this.httpService.post(config);
+      let result:any = await this.httpService.post(config);
       let msg = result?.message;
       result = _.get(result, 'result');
       this.loaderService.stopLoader();
@@ -32,11 +33,11 @@ export class SessionService {
     }
   }
 
-  async getAllSessionsAPI(obj) {
+  getAllSessionsAPI(obj) {
     //await this.loaderService.startLoader();
     let params;
-   if(obj.status){
-     params ='&status=' + obj.status + '&search=' + obj.searchText
+    if(obj.status){
+      params ='&status=' + obj.status + '&search=' + obj.searchText
     }else{
       params ='&search=' + obj.searchText
     }
@@ -44,17 +45,20 @@ export class SessionService {
       url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
-    try {
-      let data = await this.httpService.get(config);
-      let result = _.get(data, 'result');
-      //this.loaderService.stopLoader();
-      return result;
-    }
-    catch (error) {
-     // this.loaderService.stopLoader();
-      let res = []
-      return res;
-    }
+    // try {
+      return this.httpService.get(config).pipe(
+        map((data)=>{
+          let result = _.get(data, 'result');
+          //this.loaderService.stopLoader();
+          return result ? result : [];
+        })
+      )
+    // }
+    // catch (error) {
+    //  // this.loaderService.stopLoader();
+    //   let res = []
+    //   return res;
+    // }
   }
 
 async getSessionsList(obj) {
@@ -136,7 +140,7 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.get(config);
+      let data:any = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
         this.openBrowser(data.result.link);
@@ -158,7 +162,7 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.get(config);
+      let data:any = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
         this.openBrowser(data.result.link);
@@ -186,11 +190,11 @@ async getSessionsList(obj) {
   }
 
   openBrowser(link) {
-    let browser = this.inAppBrowser.create(link, `_system`);
-    browser.on('exit').subscribe(() => {
-    }, err => {
-      console.error(err);
-    });
+    // let browser = this.inAppBrowser.create(link, `_system`);
+    // browser.on('exit').subscribe(() => {
+    // }, err => {
+    //   console.error(err);
+    // });
   }
 
   async submitFeedback(feedbackData, sessionId) {
@@ -212,7 +216,7 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.post(config);
+      let data:any = await this.httpService.post(config);
       return data.result[0].data;
     }
     catch (error) {

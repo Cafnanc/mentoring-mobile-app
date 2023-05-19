@@ -52,7 +52,7 @@ export class CreatedByMePage implements OnInit {
 
   async fetchSessionDetails() {
     var obj = { page: this.page, limit: this.limit, status: this.type, searchText: this.searchText };
-    var response = await this.sessionService.getAllSessionsAPI(obj);
+    var response:any = await this.sessionService.getAllSessionsAPI(obj);
     this.loading = false;
     if (response?.data) {
       this.sessions = this.sessions.concat(response?.data);

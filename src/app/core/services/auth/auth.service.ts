@@ -11,6 +11,7 @@ import { ToastService } from '../toast.service';
 import { UserService } from '../user/user.service';
 import { ProfileService } from '../profile/profile.service';
 import { TranslateService } from '@ngx-translate/core';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -45,40 +46,46 @@ export class AuthService {
     }
   }
 
-  async loginAccount(formData) {
-    await this.loaderService.startLoader();
+  loginAccount(formData) {
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
     };
-    try {
-      const data: any = await this.httpService.post(config);
-      let userData = await this.setUserInLocal(data);
-      this.loaderService.stopLoader();
-      return userData
+    // try {
+      return this.httpService.post(config).pipe(
+        map((data)=>{
+          this.setUserInLocal(data);
+          return data.result.user;
+      }))
+      
+      // this.loaderService.stopLoader();
+    // }
+    // catch (error) {
+      // this.loaderService.stopLoader();
+      // return null;
     }
-    catch (error) {
-      this.loaderService.stopLoader();
-      return null;
-    }
-  }
-  async setUserInLocal(data) {
+  
+  setUserInLocal(data) {
     const result = _.pick(data.result, ['refresh_token', 'access_token']);
     if (!result.access_token) { throw Error(); };
     this.userService.token = result;
-    await this.localStorage.setLocalData(localKeys.TOKEN, result);
-    const userData = await this.profileService.getProfileDetailsAPI();
-    if (!userData) {
-      this.localStorage.delete(localKeys.TOKEN);
-      throw Error();
-    }
-    await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-    if(userData.preferredLanguage){
-      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, userData.preferredLanguage);
-      this.translate.use(userData.preferredLanguage)
-    }
-    this.userService.userEvent.next(userData);
-    return userData;
+    this.localStorage.setLocalData(localKeys.TOKEN, JSON.stringify(result)).then(()=>{
+      this.profileService.getProfileDetailsAPI().subscribe((userData)=>{
+        if (!userData) {
+          this.localStorage.delete(localKeys.TOKEN);
+          throw Error();
+        }
+        this.localStorage.setLocalData(localKeys.USER_DETAILS, JSON.stringify(userData)).then((data)=>{
+          if(userData.preferredLanguage){
+            this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, JSON.stringify(userData.preferredLanguage));
+            this.translate.use(userData.preferredLanguage);
+          }
+        })
+        this.userService.userEvent.next(userData);
+        return userData;
+      })
+    })
   }
 
   async logoutAccount(skipApiCall?: boolean) {

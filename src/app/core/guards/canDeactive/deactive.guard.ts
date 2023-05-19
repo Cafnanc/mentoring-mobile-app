@@ -1,9 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  CanDeactivate,
-  RouterStateSnapshot
-} from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 
 export interface isDeactivatable {
@@ -13,7 +9,7 @@ export interface isDeactivatable {
 @Injectable({
   providedIn: 'root'
 })
-export class CanLeavePageGuard implements CanDeactivate<isDeactivatable> {
+export class CanLeavePageGuard  {
   canDeactivate(
     component: isDeactivatable,
     currentRoute: ActivatedRouteSnapshot,

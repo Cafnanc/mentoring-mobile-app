@@ -1,15 +1,15 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, HostListener, NgZone } from '@angular/core';
 import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService} from './core/services';
+import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService, HttpService} from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+// import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+// import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
 
@@ -26,10 +26,10 @@ export class AppComponent {
   { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
   { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
 ];
-
-
+  deferredPrompt;
   isMentor:boolean
   showAlertBox = false;
+  showButton: boolean=false;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -40,18 +40,28 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
-    private deeplinks: Deeplinks,
+    private http: HttpService,
     private authService:AuthService,
     private profile: ProfileService,
     private zone:NgZone,
     private _location: Location,
     private alert: AlertController,
-    private screenOrientation: ScreenOrientation,
+    // private screenOrientation: ScreenOrientation,
   ) {
+    window.addEventListener('beforeinstallprompt', (event) => {
+      // Prevent the mini-infobar from appearing on mobile.
+      event.preventDefault();
+      console.log('👍', 'beforeinstallprompt', event);
+      // Stash the event so it can be triggered later.
+      this.deferredPrompt = event;
+      this.showButton = true;
+      // Remove the 'hidden' class from the install button container.
+    });
     this.initializeApp();
     this.router.navigate(["/"]);
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
+
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {
       if (this._location.isCurrentPathEqualTo("/tabs/home")){
@@ -85,12 +95,29 @@ export class AppComponent {
     });
   }
 
+  showInstallBanner() {
+    if (this.deferredPrompt !== undefined && this.deferredPrompt !== null) {
+      // Show the prompt
+      this.deferredPrompt.prompt();
+      // Wait for the user to respond to the prompt
+      this.deferredPrompt.userChoice
+      .then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        } else {
+          console.log('User dismissed the A2HS prompt');
+        }
+        // We no longer need the prompt.  Clear it up.
+        this.deferredPrompt = null;
+      });
+    }
+  }
   initializeApp() {
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
-      setTimeout(async ()=>{
+      this.setHttpHeaders().then(() => {
         this.languageSetting();
-      },0)
+      })
       this.db.init();
       setTimeout(async ()=>{
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
@@ -98,9 +125,9 @@ export class AppComponent {
           this.getUser();
         }
       },1000);
-      setTimeout(() => {
-        document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
-      }, 2000);
+      // setTimeout(() => {
+      //   document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
+      // }, 2000);
 
       this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
@@ -120,6 +147,17 @@ export class AppComponent {
     });
     this.subscribeBackButton();
   }
+  showInstallPromotion() {
+    throw new Error('Method not implemented.');
+  }
+
+  async setHttpHeaders() {
+    await this.http.setHeader();
+    this.userService.userEventEmitted$.subscribe(async () => {
+      await this.http.setHeader();
+    })
+  }
+
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
       if(data){
@@ -188,3 +226,4 @@ export class AppComponent {
   }
 
 }
+

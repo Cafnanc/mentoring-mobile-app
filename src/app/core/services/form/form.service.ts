@@ -15,10 +15,9 @@ export class FormService {
       `SELECT * FROM forms where primary_key=?`,
       [this.getUniqueKey(formBody)]
     );
-    dbForm = dbForm[0];
     // check if db form is expired
     if (dbForm && !this.checkIfexpired(dbForm.ttl)) {
-      console.log(dbForm);
+      dbForm = dbForm[0]
       return JSON.parse(dbForm.form);
     }
     //if db form expired or not present then call api
@@ -31,18 +30,18 @@ export class FormService {
     if (!_.has(resp, 'result.data.fields')) {
       return resp; // if form is not present return without storing
     }
-    this.db
-      .store(
-        `INSERT OR REPLACE INTO forms (primary_key,form,ttl) VALUES(?,?,?);`,
-        [
-          this.getUniqueKey(formBody),
-          JSON.stringify(resp),
-          this.timeToExpire(24),
-        ]
-      )
-      .then((res) => {
-        console.log(res);
-      });
+    // this.db
+    //   .store(
+    //     `INSERT OR REPLACE INTO forms (primary_key,form,ttl) VALUES(?,?,?);`,
+    //     [
+    //       this.getUniqueKey(formBody),
+    //       JSON.stringify(resp),
+    //       this.timeToExpire(24),
+    //     ]
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
     return resp;
   };
 

@@ -65,11 +65,13 @@ export class HomePage implements OnInit {
     this.content.scrollToTop(1000);
   }
 
-  async ionViewWillEnter() {
+  ionViewWillEnter() {
     this.getSessions();
     this.gotToTop();
     var obj = { page: this.page, limit: this.limit, searchText: "" };
-    this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+    this.sessionService.getAllSessionsAPI(obj).subscribe((sessions)=>{
+      this.createdSessions = sessions;
+    })
   }
   async eventAction(event) {
     switch (event.type) {
@@ -83,7 +85,7 @@ export class HomePage implements OnInit {
         break;
 
       case 'enrollAction':
-        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        let enrollResult:any = await this.sessionService.enrollSession(event.data._id);
         if(enrollResult.result){
           this.toast.showToast(enrollResult.message, "success")
           this.getSessions();
@@ -114,17 +116,18 @@ export class HomePage implements OnInit {
     })
   }
 
-  async getSessions() {
+  getSessions() {
     const config = {
       url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
     };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.sessions = data.result;
-      this.sessionsCount = data.result.count;
-    }
-    catch (error) {
-    }
+    // try {
+      this.httpService.get(config).subscribe((data)=>{
+        this.sessions = data.result;
+        this.sessionsCount = data.result.count;
+      })
+    // }
+    // catch (error) {
+    // }
   }
   async openModal() {
     const modal = await this.modalController.create({

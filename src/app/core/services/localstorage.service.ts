@@ -1,63 +1,39 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
-    private _storage: Storage | null = null;
 
-    constructor(private storage: Storage) {
-      this.init();
-    }
-
-    async init() {
-        const storage = await this.storage.create();
-        this._storage = storage;
-      }
+  constructor() {}
     
   setLocalData(key, value): Promise<any> {
     return new Promise((resolve, reject) => {
-          this._storage?.set(key, value).then((success) => {
-            resolve(success);
-          });
+      let data = localStorage.setItem(key, value);
+      resolve(data)
     });
   }
 
   getLocalData(key): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._storage?.get(key)
-        .then((data) => {
-          if (data) {
-            resolve(data);
-          } else {
-            resolve(null);
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
+      let data = localStorage.getItem(key)
+      resolve(data)
     });
   }
 
   deleteAll(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._storage
-        .clear()
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((error) => {
-          reject();
-        });
+      localStorage.clear();
+      resolve(true)
     });
   }
 
   delete(key): Promise<any> {
     return new Promise((resolve, reject) => {
-          this._storage.remove(key).then((data) => {
-            resolve(data);
-          });
+      for (const keys of key) {
+        localStorage.removeItem(keys);
+      }
+      resolve(key)
     });
   }
 }

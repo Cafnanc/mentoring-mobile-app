@@ -136,7 +136,7 @@ export class CreateSessionPage implements OnInit {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
-        let result = await this.sessionService.createSession(form, this.id);
+        let result:any = await this.sessionService.createSession(form, this.id);
         if (result) {
           this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
         } else {
@@ -160,16 +160,16 @@ export class CreateSessionPage implements OnInit {
   }
 
   upload(data) {
-    this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
-      this.profileImageData.isUploaded = true;
-      this.profileImageData.haveValidationError = false;
-      this.loaderService.stopLoader();
-      this.onSubmit();
-    }, error => {
-      this.loaderService.stopLoader();
-    })
+    // this.attachment.cloudImageUpload(data).then(resp => {
+    //   this.profileImageData.image = data.uploadUrl.destFilePath;
+    //   this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
+    //   this.profileImageData.isUploaded = true;
+    //   this.profileImageData.haveValidationError = false;
+    //   this.loaderService.stopLoader();
+    //   this.onSubmit();
+    // }, error => {
+    //   this.loaderService.stopLoader();
+    // })
   }
 
   resetForm() {

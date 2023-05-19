@@ -59,7 +59,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
-    var result = await this.profileService.getProfileDetailsAPI();
+    var result:any = await this.profileService.getProfileDetailsAPI();
     this.profileImageData.image = result.image;
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'result.data.fields');
@@ -131,16 +131,16 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.isUploaded = false;
   }
   upload(data) {
-    this.loaderService.startLoader();
-    this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.destFilePath;
-      this.form1.myForm.value.image = data.uploadUrl.destFilePath
-      this.profileImageData.isUploaded = true;
-      this.loaderService.stopLoader();
-      this.onSubmit();
-    }, error => {
-      this.loaderService.stopLoader();
-    })
+    // this.loaderService.startLoader();
+    // this.attachment.cloudImageUpload(data).then(resp => {
+    //   this.profileImageData.image = data.uploadUrl.destFilePath;
+    //   this.form1.myForm.value.image = data.uploadUrl.destFilePath
+    //   this.profileImageData.isUploaded = true;
+    //   this.loaderService.stopLoader();
+    //   this.onSubmit();
+    // }, error => {
+    //   this.loaderService.stopLoader();
+    // })
   }
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();

@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
+import { HttpClient } from '@angular/common/http';
 import { RequestParams } from '../../interface/request-param';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
@@ -13,6 +13,7 @@ import { localKeys } from '../../constants/localStorage.keys';
 import { AuthService } from '../auth/auth.service';
 import { ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
+import { catchError, map } from 'rxjs/operators'
 
 
 @Injectable({
@@ -20,8 +21,10 @@ import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 })
 export class HttpService {
   baseUrl;
+  private timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  httpHeaders: { 'X-auth-token': string; 'Content-Type': string; timeZone: string; 'accept-language': any; };
   constructor(
-    private http: HTTP,
+    private http: HttpClient,
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
@@ -31,88 +34,119 @@ export class HttpService {
     private modalController: ModalController,
   ) {
     this.baseUrl = environment.baseUrl;
+    this.setHeader();
   }
 
-  async setHeaders() {
-    let token = await this.getToken();
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
-    const headers = {
-      'X-auth-token': token ? token : "",
-      'Content-Type': 'application/json',
-      'timeZone': timezone,
-      'accept-language':acceptLanguage
-    }
-    return headers;
+  async setHeader(lang?:string): Promise<any> {
+    return new Promise(async (resolve) => {
+      try {
+        let userToken = (await this.userService.getUserValue()) ? 'bearer ' + (await this.userService.getUserValue()).access_token : '';
+        const headers = {
+          'X-auth-token': userToken ? userToken : '',
+          'Content-Type': 'application/json',
+          'timeZone': this.timeZone,
+          'accept-language': lang ? lang : 'en'
+        };
+        this.httpHeaders = headers;
+        resolve(true)
+      } catch (error) {
+      }
+    });
   }
 
-  async post(requestParam: RequestParams) {
-    if (!this.checkNetworkAvailability()) {
-      throw Error(null);
-    }
-    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+  post(requestParam: RequestParams) {
+    // if (!this.checkNetworkAvailability()) {
+    //   throw Error(null);
+    // }
+    // const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.post(this.baseUrl + requestParam.url, body, headers)
-      .then((data: any) => {
-        let result: any = JSON.parse(data.data);
-        if (result.responseCode === "OK") {
-          return result;
-        }
-      }, error => {
-        return this.handleError(error);
-      });
+    // this.http.setDataSerializer('json');
+    // this.http.setRequestTimeout(60);
+    console.log(this.httpHeaders)
+    return this.http.post(this.baseUrl + requestParam.url, body, {headers: this.httpHeaders}).pipe(
+      map((data:any)=>{
+      if (data.responseCode === "OK") {
+        return data;
+      }
+    }))
+      // .then((data: any) => {
+      //   let result: any = JSON.parse(data.data);
+      //   if (result.responseCode === "OK") {
+      //     return result;
+      //   }
+      // }, error => {
+      //   return this.handleError(error);
+      // });
   }
 
-  async get(requestParam: RequestParams) {
-    if (!this.checkNetworkAvailability()) {
-      throw Error(null);
-    }
-    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.get(this.baseUrl + requestParam.url, '', headers)
-      .then((data: any) => {
-        let result: any = JSON.parse(data.data);
-        if(result?.meta?.data?.length){
-          this.openModal(result?.meta?.data[0]);
+  // get(config: any) {
+    // console.log(this.httpHeaders);
+    
+    //   .pipe(
+    //     catchError(this.handleError.bind(this))
+    //   );
+  // }
+
+  get(requestParam: RequestParams) {
+    // if (!this.checkNetworkAvailability()) {
+    //   throw Error(null);
+    // }
+    // const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    // this.http.setDataSerializer('json');
+    // this.http.setRequestTimeout(60);
+    console.log(this.httpHeaders)
+    return this.http.get(`${this.baseUrl}${requestParam.url}`, {headers: this.httpHeaders}).pipe(
+      map((data:any)=>{
+        if(data?.meta?.data?.length){
+          this.openModal(data?.meta?.data[0]);
         }
-        if (result.responseCode === "OK") {
-          return result;
+        if (data.responseCode === "OK") {
+          return data;
         }
-      }, error => {
-        return this.handleError(error);
-      });
+      }),
+      catchError(this.handleError.bind(this))
+      )
+      // .then((data: any) => {
+      //   let result: any = JSON.parse(data.data);
+      //   if(result?.meta?.data?.length){
+      //     this.openModal(result?.meta?.data[0]);
+      //   }
+      //   if (result.responseCode === "OK") {
+      //     return result;
+      //   }
+      // }, error => {
+      //   return this.handleError(error);
+      // });
   }
 
-  async delete(requestParam: RequestParams) {
-    if (!this.checkNetworkAvailability()) {
-      throw Error(null);
-    }
-    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.delete(this.baseUrl + requestParam.url, '', headers)
-      .then((data: any) => {
-        let result: any = JSON.parse(data.data);
-        if (result.responseCode === "OK") {
-          return result;
-        }
-      }, error => {
-        return this.handleError(error);
-      });
+  delete(requestParam: RequestParams) {
+    // if (!this.checkNetworkAvailability()) {
+    //   throw Error(null);
+    // }
+    // const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    // this.http.setDataSerializer('json');
+    // this.http.setRequestTimeout(60);
+    return this.http.delete(this.baseUrl + requestParam.url, {headers: this.httpHeaders}).subscribe((data)=>{
+    })
+      // .then((data: any) => {
+      //   let result: any = JSON.parse(data.data);
+      //   if (result.responseCode === "OK") {
+      //     return result;
+      //   }
+      // }, error => {
+      //   return this.handleError(error);
+      // });
   }
 
   //network check
-  checkNetworkAvailability() {
-    if (!this.network.isNetworkAvailable) {
-      this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
-      return false;
-    } else {
-    return true;
-    }
-  }
+  // checkNetworkAvailability() {
+  //   if (!this.network.isNetworkAvailable) {
+  //     this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
+  //     return false;
+  //   } else {
+  //   return true;
+  //   }
+  // }
 
   //token validation and logout 
 
@@ -130,7 +164,7 @@ export class HttpService {
         authService.logoutAccount();
       }
       this.userService.token['access_token'] = access_token;
-      this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
+      this.localStorage.setLocalData(localKeys.TOKEN, JSON.stringify(this.userService.token));
     }
     let userToken = 'bearer ' + _.get(this.userService.token, 'access_token');
     return userToken;
@@ -155,7 +189,7 @@ export class HttpService {
 
   public handleError(result) {
     console.log(result);
-    let msg = JSON.parse(result.error);
+    let msg = result.error;
     switch (result.status) {
       case 400:
       case 406:

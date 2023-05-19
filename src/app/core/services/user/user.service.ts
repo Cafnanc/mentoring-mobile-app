@@ -19,15 +19,18 @@ export class UserService {
     private localStorage: LocalStorageService,
     ) { 
       this.baseUrl = environment.baseUrl;
+      this.getUserValue()
     }
 
   async getUserValue() {
+    if(this.token)
+      return this.token;
     return this.localStorage
-      .getLocalData(localKeys.TOKEN)
-      .then((data: any) => {
-        this.token=data;
-        return data;
-      })
+    .getLocalData(localKeys.TOKEN)
+    .then((data: any) => {
+      this.token=JSON.parse(data);
+      return data;
+    })
       .catch((error) => { });
   }
 

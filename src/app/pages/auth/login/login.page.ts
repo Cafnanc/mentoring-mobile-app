@@ -84,20 +84,21 @@ export class LoginPage implements OnInit {
     });
   }
 
-  async onSubmit() {
+  onSubmit() {
     this.form1.onSubmit();
     if (this.form1.myForm.valid) {
-      this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
-      if (this.userDetails !== null) {
-        if (this.id) {
-          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
-        }else if(this.mentorId){
-          this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
-        } else {
-          this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+      this.authService.loginAccount(this.form1.myForm.value).subscribe((userDetails)=>{
+        if (userDetails !== null) {
+          if (this.id) {
+            this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+          }else if(this.mentorId){
+            this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
+          } else {
+            this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+          }
         }
-      }
-      this.menuCtrl.enable(true);
+        this.menuCtrl.enable(true);
+      })
     }
   }
 
