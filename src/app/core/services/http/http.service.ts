@@ -97,9 +97,9 @@ export class HttpService {
     console.log(this.httpHeaders)
     return this.http.get(`${this.baseUrl}${requestParam.url}`, {headers: this.httpHeaders}).pipe(
       map((data:any)=>{
-        if(data?.meta?.data?.length){
-          this.openModal(data?.meta?.data[0]);
-        }
+        // if(data?.meta?.data?.length){
+        //   this.openModal(data?.meta?.data[0]);
+        // }
         if (data.responseCode === "OK") {
           return data;
         }
@@ -206,13 +206,13 @@ export class HttpService {
     throw Error(result);
   }
 
-  async openModal(sessionData) {
-    const modal = await this.modalController.create({
-      component: FeedbackPage,
-      componentProps: {
-        data: sessionData,
-      }
-    });
-    return await modal.present();
-  }
+  // async openModal(sessionData) {
+  //   const modal = await this.modalController.create({
+  //     component: FeedbackPage,
+  //     componentProps: {
+  //       data: sessionData,
+  //     }
+  //   });
+  //   return await modal.present();
+  // }
 }

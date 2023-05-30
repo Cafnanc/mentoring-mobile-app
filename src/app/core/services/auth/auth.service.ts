@@ -53,8 +53,10 @@ export class AuthService {
       payload: formData,
     };
     // try {
+      console.log(config)
       return this.httpService.post(config).pipe(
         map((data)=>{
+          console.log(data)
           this.setUserInLocal(data);
           return data.result.user;
       }))
@@ -89,7 +91,7 @@ export class AuthService {
   }
 
   async logoutAccount(skipApiCall?: boolean) {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
@@ -104,13 +106,13 @@ export class AuthService {
       this.localStorage.delete(localKeys.TOKEN);
       this.userService.token = null;
       this.userService.userEvent.next(null);
-      await this.loaderService.stopLoader();
+      // await this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
         replaceUrl: true
       });
     }
     catch (error) {
-      await this.loaderService.stopLoader();
+      // await this.loaderService.stopLoader();
     }
   }
 

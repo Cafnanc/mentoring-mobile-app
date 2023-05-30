@@ -26,10 +26,19 @@ export class AppComponent {
   { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
   { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
 ];
-  deferredPrompt;
   isMentor:boolean
   showAlertBox = false;
-  showButton: boolean=false;
+  deferredPrompt: any;
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onbeforeinstallprompt(e) {
+    console.log(e);
+    alert("install event")
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    this.deferredPrompt = e;
+  }
+
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -48,17 +57,17 @@ export class AppComponent {
     private alert: AlertController,
     // private screenOrientation: ScreenOrientation,
   ) {
-    window.addEventListener('beforeinstallprompt', (event) => {
-      // Prevent the mini-infobar from appearing on mobile.
-      event.preventDefault();
-      console.log('👍', 'beforeinstallprompt', event);
-      // Stash the event so it can be triggered later.
-      this.deferredPrompt = event;
-      this.showButton = true;
-      // Remove the 'hidden' class from the install button container.
-    });
     this.initializeApp();
     this.router.navigate(["/"]);
+    console.log("app-component")
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log(e)
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later on the button event.
+      this.deferredPrompt = e;
+    // Update UI by showing a button to notify the user they can add to home screen
+    });
     // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
 
@@ -95,7 +104,9 @@ export class AppComponent {
     });
   }
 
-  showInstallBanner() {
+  addToHomeScreen() {
+    // hide our user interface that shows our A2HS button
+    // Show the prompt
     if (this.deferredPrompt !== undefined && this.deferredPrompt !== null) {
       // Show the prompt
       this.deferredPrompt.prompt();
@@ -111,12 +122,20 @@ export class AppComponent {
         this.deferredPrompt = null;
       });
     }
-  }
+}
   initializeApp() {
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
       this.setHttpHeaders().then(() => {
         this.languageSetting();
+        window.addEventListener('beforeinstallprompt', (e) => {
+          console.log(e)
+          // Prevent Chrome 67 and earlier from automatically showing the prompt
+          e.preventDefault();
+          // Stash the event so it can be triggered later on the button event.
+          this.deferredPrompt = e;
+        // Update UI by showing a button to notify the user they can add to home screen
+        });
       })
       this.db.init();
       setTimeout(async ()=>{

@@ -39,10 +39,10 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
         IonicModule.forRoot(),
         AppRoutingModule,
         HttpClientModule,
-        IonicStorageModule.forRoot({
-            name: 'mentoringApp',
-            driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
-        }),
+        // IonicStorageModule.forRoot({
+        //     name: 'mentoringApp',
+        //     driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
+        // }),
         CoreModule,
         TranslateModule.forRoot({
             loader: {
@@ -52,12 +52,12 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
             },
         }),
         ReactiveFormsModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', {
-            enabled: !isDevMode(),
-            // enabled: true,
-            // Register the ServiceWorker as soon as the application is stable
-            // or after 30 seconds (whichever comes first).
-            registrationStrategy: 'registerWhenStable:30000'
+        ServiceWorkerModule.register('ngsw-worker.js', {
+          // enabled: !isDevMode(),
+          enabled: true,
+          // Register the ServiceWorker as soon as the application is stable
+          // or after 30 seconds (whichever comes first).
+          registrationStrategy: 'registerWhenStable:30000'
         }),
     ],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

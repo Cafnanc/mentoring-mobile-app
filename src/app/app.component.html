@@ -2,7 +2,6 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-header [translucent]="true" class="ion-no-border">
-        <button (click)="addToHomeScreen()" *ngIf="showButton">Add to Home Screen</button>
         <div class="sub-menu-toolbar">
           <div slot="start" class="img-mainDiv">
               <div class="image-div" *ngIf="user?.image; else elseBlock">
@@ -13,6 +12,7 @@
               </ng-template>
           </div >
           <div class="usr-div">
+            <ion-button (click)="addToHomeScreen()">Add to home screen</ion-button>
             <ion-label class="username"><strong>{{user?.name}}</strong></ion-label>
             <ion-label *ngIf="isMentor">{{"MENTOR" | translate }}</ion-label>
             <ion-label *ngIf="!isMentor">{{"MENTEE" | translate }}</ion-label>
