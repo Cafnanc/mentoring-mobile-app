@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService, LoaderService, ToastService } from '..';
+import { HttpService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 // import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
@@ -11,11 +11,10 @@ import { map } from 'rxjs/operators';
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router) { }
+  constructor(private httpService: HttpService, private toast: ToastService, private router: Router) { }
 
 
   async createSession(formData, id?: string) {
-    await this.loaderService.startLoader();
     const config = {
       url: id == null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION + `/${id}`,
       payload: formData
@@ -24,17 +23,14 @@ export class SessionService {
       let result:any = await this.httpService.post(config);
       let msg = result?.message;
       result = _.get(result, 'result');
-      this.loaderService.stopLoader();
       this.toast.showToast(msg, "success");
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 
   getAllSessionsAPI(obj) {
-    //await this.loaderService.startLoader();
     let params;
     if(obj.status){
       params ='&status=' + obj.status + '&search=' + obj.searchText
@@ -45,20 +41,12 @@ export class SessionService {
       url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
-    // try {
       return this.httpService.get(config).pipe(
         map((data)=>{
           let result = _.get(data, 'result');
-          //this.loaderService.stopLoader();
           return result ? result : [];
         })
       )
-    // }
-    // catch (error) {
-    //  // this.loaderService.stopLoader();
-    //   let res = []
-    //   return res;
-    // }
   }
 
 async getSessionsList(obj) {
@@ -91,7 +79,7 @@ async getSessionsList(obj) {
   }
 
   async getShareSessionId(id) {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GET_SHARE_SESSION_LINK + id,
       payload: {}
@@ -99,11 +87,11 @@ async getSessionsList(obj) {
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
     }
   }
 
@@ -134,14 +122,14 @@ async getSessionsList(obj) {
   }
 
   async startSession(id) {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.START_SESSION + id,
       payload: {}
     };
     try {
       let data:any = await this.httpService.get(config);
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
         this.openBrowser(data.result.link);
         return true;
@@ -150,42 +138,42 @@ async getSessionsList(obj) {
       }
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       return false;
     }
   }
 
   async joinSession(id) {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.JOIN_SESSION + id,
       payload: {}
     };
     try {
       let data:any = await this.httpService.get(config);
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
         this.openBrowser(data.result.link);
       }
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
     }
   }
 
   async deleteSession(id) {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_SESSION + `/${id}`,
       payload: {}
     };
     try {
       let data = await this.httpService.delete(config);
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       return data;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
     }
   }
 
@@ -222,5 +210,4 @@ async getSessionsList(obj) {
     catch (error) {
     }
   }
-
 }

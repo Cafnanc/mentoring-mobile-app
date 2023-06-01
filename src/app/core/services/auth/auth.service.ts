@@ -4,7 +4,6 @@ import { LocalStorageService } from '../localstorage.service';
 import { HttpService } from '../http/http.service';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
-import { LoaderService } from '../loader/loader.service';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { ToastService } from '../toast.service';
@@ -21,7 +20,6 @@ export class AuthService {
   constructor(
     private localStorage: LocalStorageService,
     private httpService: HttpService,
-    private loaderService: LoaderService,
     private router: Router,
     private toast: ToastService,
     private userService: UserService,
@@ -30,7 +28,6 @@ export class AuthService {
   ) { }
 
   async createAccount(formData) {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
@@ -38,21 +35,17 @@ export class AuthService {
     try {
       let data: any = await this.httpService.post(config);
       let userData = this.setUserInLocal(data);
-      this.loaderService.stopLoader();
       return userData;
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 
   loginAccount(formData) {
-    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
     };
-    // try {
       console.log(config)
       return this.httpService.post(config).pipe(
         map((data)=>{
@@ -60,12 +53,6 @@ export class AuthService {
           this.setUserInLocal(data);
           return data.result.user;
       }))
-      
-      // this.loaderService.stopLoader();
-    // }
-    // catch (error) {
-      // this.loaderService.stopLoader();
-      // return null;
     }
   
   setUserInLocal(data) {
@@ -91,7 +78,6 @@ export class AuthService {
   }
 
   async logoutAccount(skipApiCall?: boolean) {
-    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
@@ -106,13 +92,11 @@ export class AuthService {
       this.localStorage.delete(localKeys.TOKEN);
       this.userService.token = null;
       this.userService.userEvent.next(null);
-      // await this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
         replaceUrl: true
       });
     }
     catch (error) {
-      // await this.loaderService.stopLoader();
     }
   }
 

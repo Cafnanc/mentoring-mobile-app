@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
+import { HttpService, ToastService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-// import { Device } from '@awesome-cordova-plugins/device/ngx';
 
 @Component({
   selector: 'app-help',
@@ -32,7 +31,7 @@ export class HelpPage implements OnInit {
   };
   metaData: { deviceName: string; androidVersion: string; };
 
-  constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService) { }
+  constructor(private router: Router, private toast: ToastService, private httpService: HttpService) { }
 
   ngOnInit() {
     // this.metaData = {
@@ -47,7 +46,7 @@ export class HelpPage implements OnInit {
     this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`])
   }
   async submitHelpReport() {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.REPORT_ISSUE,
       payload: this.form1.myForm.value
@@ -55,10 +54,10 @@ export class HelpPage implements OnInit {
     try {
       let result:any = await this.httpService.post(config);
       result?this.toast.showToast(result.message, "success"):this.toast.showToast(result.message, "danger");
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
     }
   }
 }

@@ -33,9 +33,7 @@ export class AppComponent {
   onbeforeinstallprompt(e) {
     console.log(e);
     alert("install event")
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     this.deferredPrompt = e;
   }
 
@@ -59,16 +57,10 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
-    console.log("app-component")
     window.addEventListener('beforeinstallprompt', (e) => {
-      console.log(e)
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
-      // Stash the event so it can be triggered later on the button event.
       this.deferredPrompt = e;
-    // Update UI by showing a button to notify the user they can add to home screen
     });
-    // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
 
   subscribeBackButton() {
@@ -105,12 +97,8 @@ export class AppComponent {
   }
 
   addToHomeScreen() {
-    // hide our user interface that shows our A2HS button
-    // Show the prompt
     if (this.deferredPrompt !== undefined && this.deferredPrompt !== null) {
-      // Show the prompt
       this.deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
       this.deferredPrompt.userChoice
       .then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
@@ -118,23 +106,17 @@ export class AppComponent {
         } else {
           console.log('User dismissed the A2HS prompt');
         }
-        // We no longer need the prompt.  Clear it up.
         this.deferredPrompt = null;
       });
     }
 }
   initializeApp() {
     this.platform.ready().then(() => {
-      this.network.netWorkCheck();
       this.setHttpHeaders().then(() => {
         this.languageSetting();
         window.addEventListener('beforeinstallprompt', (e) => {
-          console.log(e)
-          // Prevent Chrome 67 and earlier from automatically showing the prompt
           e.preventDefault();
-          // Stash the event so it can be triggered later on the button event.
           this.deferredPrompt = e;
-        // Update UI by showing a button to notify the user they can add to home screen
         });
       })
       this.db.init();
@@ -144,9 +126,6 @@ export class AppComponent {
           this.getUser();
         }
       },1000);
-      // setTimeout(() => {
-      //   document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
-      // }, 2000);
 
       this.userService.userEventEmitted$.subscribe(data=>{
         if(data){

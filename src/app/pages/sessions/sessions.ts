@@ -25,7 +25,7 @@ export class SessionsPage implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
     private httpService: HttpService,
-    private loaderService: LoaderService,
+    // private loaderService: LoaderService,
     private router: Router,
     private sessionService: SessionService) {
     this.activatedRoute.queryParamMap.subscribe(params => {

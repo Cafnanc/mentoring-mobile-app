@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
+import { AttachmentService, ToastService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import {
@@ -55,7 +55,6 @@ export class CreateSessionPage implements OnInit {
     private platform: Platform,
     private file: File,
     private api: HttpService,
-    private loaderService: LoaderService,
     private translate: TranslateService,
     private alert: AlertController,
     private form: FormService,
@@ -150,7 +149,7 @@ export class CreateSessionPage implements OnInit {
   }
 
   async getImageUploadUrl(file) {
-    this.loaderService.startLoader();
+    // this.loaderService.startLoader();
     let config = {
       url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name
     }

@@ -4,7 +4,7 @@ import { IonContent } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
   HttpService,
-  LoaderService,
+  // LoaderService,
   ToastService
 } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
@@ -30,7 +30,7 @@ export class MentorDirectoryPage implements OnInit {
   mentorsCount;
   constructor(
     private router: Router,
-    private loaderService: LoaderService,
+    // private loaderService: LoaderService,
     private httpService: HttpService
   ) { }
 
@@ -50,20 +50,20 @@ export class MentorDirectoryPage implements OnInit {
   }
 
   async getMentors() {
-    await this.loaderService.startLoader();
+    // await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText),
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       console.log(data.result, "data.result");
       this.mentors = this.mentors.concat(data.result.data);
       this.mentorsCount = data.result.count;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
     }
   }
   eventAction(event) {

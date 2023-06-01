@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
+import { HttpService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -20,7 +20,7 @@ export class HomeSearchPage implements OnInit {
   results=[];
   type:any;
   searching=true;
-  constructor(private sessionService:SessionService, private loaderService: LoaderService,private httpService: HttpService, private router: Router, private toast: ToastService) { }
+  constructor(private sessionService:SessionService, private httpService: HttpService, private router: Router, private toast: ToastService) { }
 
   ngOnInit() {
     this.type='all-sessions';

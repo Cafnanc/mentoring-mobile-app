@@ -11,7 +11,6 @@ import { HttpService, LoaderService, LocalStorageService, ToastService, UserServ
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { Location } from '@angular/common';
-import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 
 @Component({
   selector: 'app-home',
@@ -111,7 +110,7 @@ export class HomePage implements OnInit {
     this.profileService.profileDetails().then(data => {
       this.user = data
       if (!this.user?.hasAcceptedTAndC) {
-        this.openModal();
+        // this.openModal();
       }
     })
   }
@@ -129,14 +128,14 @@ export class HomePage implements OnInit {
     // catch (error) {
     // }
   }
-  async openModal() {
-    const modal = await this.modalController.create({
-      component: TermsAndConditionsPage,
-      backdropDismiss: false,
-      swipeToClose: false
-    });
-    return await modal.present();
-  }
+  // async openModal() {
+  //   const modal = await this.modalController.create({
+  //     component: TermsAndConditionsPage,
+  //     backdropDismiss: false,
+  //     swipeToClose: false
+  //   });
+  //   return await modal.present();
+  // }
   async segmentChanged(event) {
     this.selectedSegment = event.name;
   }

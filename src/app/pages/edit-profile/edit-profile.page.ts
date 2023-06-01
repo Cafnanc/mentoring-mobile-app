@@ -11,7 +11,7 @@ import {
 import * as _ from 'lodash-es';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
-import { AttachmentService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
+import { AttachmentService, LocalStorageService, ToastService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { AlertController, Platform } from '@ionic/angular';
@@ -50,7 +50,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private attachment: AttachmentService,
     private platform: Platform,
     private file: File,
-    private loaderService: LoaderService,
+    // private loaderService: LoaderService,
     private alert: AlertController,
     private translate :TranslateService,
     private toast : ToastService,
@@ -143,12 +143,12 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     // })
   }
   async getImageUploadUrl(file) {
-    this.loaderService.startLoader();
+    // this.loaderService.startLoader();
     let config = {
       url: urlConstants.API_URLS.GET_IMAGE_UPLOAD_URL + file.name
     }
     let data: any = await this.api.get(config);
-    this.loaderService.stopLoader();
+    // this.loaderService.stopLoader();
     file.uploadUrl = data.result;
     this.upload(file);
   }

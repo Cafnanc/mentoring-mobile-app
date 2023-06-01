@@ -6,7 +6,6 @@ import * as _ from 'lodash-es';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
 import { ToastService } from '../toast.service';
-import { LoaderService } from '../loader/loader.service';
 import { LocalStorageService } from '../localstorage.service';
 import { urlConstants } from '../../constants/urlConstants';
 import { localKeys } from '../../constants/localStorage.keys';
@@ -28,19 +27,17 @@ export class HttpService {
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
-    private loaderService: LoaderService,
     private localStorage: LocalStorageService,
     private injector: Injector,
     private modalController: ModalController,
   ) {
     this.baseUrl = environment.baseUrl;
-    this.setHeader();
   }
 
   async setHeader(lang?:string): Promise<any> {
     return new Promise(async (resolve) => {
       try {
-        let userToken = (await this.userService.getUserValue()) ? 'bearer ' + (await this.userService.getUserValue()).access_token : '';
+        let userToken = this.userService.token ? 'bearer ' + this.userService.token.access_token : '';
         const headers = {
           'X-auth-token': userToken ? userToken : '',
           'Content-Type': 'application/json',
@@ -62,7 +59,7 @@ export class HttpService {
     let body = requestParam.payload ? requestParam.payload : {};
     // this.http.setDataSerializer('json');
     // this.http.setRequestTimeout(60);
-    console.log(this.httpHeaders)
+    console.log("accesstoken" , this.userService.token?.access_token)
     return this.http.post(this.baseUrl + requestParam.url, body, {headers: this.httpHeaders}).pipe(
       map((data:any)=>{
       if (data.responseCode === "OK") {
@@ -94,7 +91,7 @@ export class HttpService {
     // const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     // this.http.setDataSerializer('json');
     // this.http.setRequestTimeout(60);
-    console.log(this.httpHeaders)
+    console.log(this.httpHeaders, this.userService.token)
     return this.http.get(`${this.baseUrl}${requestParam.url}`, {headers: this.httpHeaders}).pipe(
       map((data:any)=>{
         // if(data?.meta?.data?.length){
