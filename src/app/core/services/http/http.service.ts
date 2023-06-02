@@ -31,13 +31,14 @@ export class HttpService {
     private injector: Injector,
     private modalController: ModalController,
   ) {
+    this.setHeader();
     this.baseUrl = environment.baseUrl;
   }
 
   async setHeader(lang?:string): Promise<any> {
     return new Promise(async (resolve) => {
       try {
-        let userToken = this.userService.token ? 'bearer ' + this.userService.token.access_token : '';
+        let userToken = await this.userService.getUserValue() ? 'bearer ' + (await this.userService.getUserValue()).access_token : '';
         const headers = {
           'X-auth-token': userToken ? userToken : '',
           'Content-Type': 'application/json',
