@@ -152,7 +152,7 @@
   },
   "cli": {
     "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollection": ["@angular-eslint/schematics"]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
