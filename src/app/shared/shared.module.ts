@@ -26,6 +26,7 @@ import { MentorCardComponent } from './components/mentor-card/mentor-card.compon
 import { NumberOnlyDirective } from './directive/onlyNumbers';
 import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog-box.component';
 import { ModelComponent } from './components/model/model.component';
+import { EventCalendarComponent } from './components/event-calendar/event-calendar.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ModelComponent } from './components/model/model.component';
     MentorCardComponent,
     NumberOnlyDirective,
     JoinDialogBoxComponent,
-    ModelComponent
+    ModelComponent,
+    EventCalendarComponent
   ],
   imports: [
     CommonModule,
