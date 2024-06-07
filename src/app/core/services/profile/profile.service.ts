@@ -15,6 +15,9 @@ import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { TranslateService } from '@ngx-translate/core';
+import { UserListModalComponent } from 'src/app/shared/components/user-list-modal/user-list-modal.component';
+import { ModalController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +36,8 @@ export class ProfileService {
     private userService: UserService,
     private injector: Injector,
     private form: FormService,
-    private util: UtilService
+    private util: UtilService,
+    private modal: ModalController
   ) {
    }
   async profileUpdate(formData, showToast=true) {
@@ -190,7 +194,7 @@ export class ProfileService {
     }
     for (let i = 0; i < formData.controls.length; i++) {
       if(formData.controls[i].type == 'chip'){
-        formData.controls[i].meta.showAddOption = showAddOption;
+        formData.controls[i].meta.showAddOption.showAddButton = showAddOption;
       }
       formData.controls[i].value = existingData[formData.controls[i].name] ? existingData[formData.controls[i].name] : '';
       formData.controls[i].options = _.unionBy(
@@ -201,5 +205,17 @@ export class ProfileService {
     }
   }
 
+  async viewRolesModal(userRoles){
+    if (!userRoles.includes("mentee")) {
+      userRoles.push("mentee");
+    }
+    userRoles = userRoles.sort();
+    let modal = await this.modal.create({
+      component: UserListModalComponent,
+      cssClass: 'user-role-modal',
+      componentProps: { data: userRoles }
+    });
+    modal.present();
+  }
 
 }
