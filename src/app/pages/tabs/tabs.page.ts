@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonTabs } from '@ionic/angular';
+import { PAGE_IDS } from 'src/app/core/constants/page.ids';
 
 @Component({
   selector: 'app-tabs',
@@ -9,6 +10,10 @@ import { IonTabs } from '@ionic/angular';
 export class TabsPage {
   private activeTab?: HTMLElement;
   subscription: any;
+  dashboardPageId = PAGE_IDS.dashboard;
+  profilePageId = PAGE_IDS.profile;
+  mentorsPageId = PAGE_IDS.mentorDirectory;
+  homePageId = PAGE_IDS.home;
   constructor() {}
   tabChange(tabsRef: IonTabs) {
     this.activeTab = tabsRef?.outlet?.activatedView?.element;
