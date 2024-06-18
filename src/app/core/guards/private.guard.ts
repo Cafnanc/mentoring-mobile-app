@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { UserService } from '../services/user/user.service';
 import { UtilService } from '../services';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,9 @@ export class PrivateGuard implements CanActivate {
     return this.userService.getUserValue().then((result) => {
       if (result) {
         this.utilService?.alertClose();
+        return true;
+      }
+       else if (environment.isAuthBypassed) {
         return true;
       }
       else {

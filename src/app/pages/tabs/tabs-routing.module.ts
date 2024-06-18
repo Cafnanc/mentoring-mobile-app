@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { PrivateGuard } from 'src/app/core/guards/private.guard';
 import { CommonRoutes } from 'src/global.routes';
 import { TabsPage } from './tabs.page';
+import { AllowPageAccess } from 'src/app/core/guards/allowPageAccess/allowPageAccess.guard';
+import { PAGE_IDS } from 'src/app/core/constants/page.ids';
 
 const routes: Routes = [
   {
@@ -23,12 +25,18 @@ const routes: Routes = [
       {
         path: CommonRoutes.DASHBOARD,
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule),
-        canActivate:[PrivateGuard]
+        data: {
+          pageId: PAGE_IDS.dashboard
+        },
+        canActivate:[PrivateGuard, AllowPageAccess]
       },
       {
         path: CommonRoutes.PROFILE,
         loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule),
-        canActivate:[PrivateGuard]
+        data: {
+          pageId: PAGE_IDS.profile
+        },
+        canActivate:[PrivateGuard, AllowPageAccess]
       },
       {
         path: '',

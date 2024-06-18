@@ -2,21 +2,21 @@
 
 
   <ion-tab-bar slot="bottom" class="tab-item hide-on-large-screen">
-    <ion-tab-button tab="home">
+    <ion-tab-button tab="home" *allowTemplateView="homePageId">
       <ion-icon name="home-sharp" size="large"></ion-icon>
       <ion-label>{{'HOME' | translate}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="mentor-directory">
+    <ion-tab-button tab="mentor-directory" *allowTemplateView="mentorsPageId">
       <ion-icon name="people-circle" size="large"></ion-icon>
       <ion-label>{{'MENTORS' | translate}}</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="dashboard">
+    <ion-tab-button tab="dashboard" *allowTemplateView="dashboardPageId">
       <ion-icon name="stats-chart-sharp" size="large"></ion-icon>
       <ion-label>{{'DASHBOARD' | translate}}</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="profile">
+    <ion-tab-button tab="profile" *allowTemplateView="profilePageId">
       <ion-icon name="person-sharp" size="large"></ion-icon>
       <ion-label>{{'PROFILE' | translate}}</ion-label>
     </ion-tab-button>

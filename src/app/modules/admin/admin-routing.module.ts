@@ -4,11 +4,8 @@ import { AdminComponent } from "./admin.component";
 import { CommonRoutes } from "src/global.routes";
 import { ManageListComponent } from "./components/manage-list/manage-list.component";
 import { ManageSessionComponent } from "./components/manage-session/manage-session.component";
+import { permissions, manageSessionAction, manageUserAction} from 'src/app/core/constants/permissionsConstant';
 import { PermissionGuard } from "src/app/core/guards/permission/permission.guard";
-import { permissions , actions, manageSessionAction, manageUserAction} from 'src/app/core/constants/permissionsConstant';
-import { CreateSessionPage } from "src/app/pages/create-session/create-session.page";
-import { MANAGERS_CREATE_SESSION_FORM } from "src/app/core/constants/formConstant";
-import { PrivateGuard } from "src/app/core/guards/private.guard";
 
 const routes: Routes = [
     {

@@ -209,7 +209,9 @@ export class HttpService {
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
+        if(!environment.isAuthBypassed) {
           this.triggerLogoutConfirmationAlert(result)
+        }
 
         break
       default:

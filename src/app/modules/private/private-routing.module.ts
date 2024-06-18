@@ -4,6 +4,8 @@ import { PrivatePage } from './private.page';
 import { CommonRoutes } from 'src/global.routes';
 import { PrivateGuard } from 'src/app/core/guards/private.guard';
 import { CREATE_SESSION_FORM } from 'src/app/core/constants/formConstant';
+import { AllowPageAccess } from 'src/app/core/guards/allowPageAccess/allowPageAccess.guard';
+import { PAGE_IDS } from 'src/app/core/constants/page.ids';
 
 const routes: Routes = [
   {
@@ -63,7 +65,10 @@ const routes: Routes = [
       {
         path: CommonRoutes.HELP,
         loadChildren: () => import('../../pages/help/help.module').then(m => m.HelpPageModule),
-        canActivate: [PrivateGuard]
+        data: {
+          pageId: PAGE_IDS.help
+        },
+        canActivate: [PrivateGuard, AllowPageAccess],
       },
       {
         path: CommonRoutes.FAQ,
@@ -73,12 +78,18 @@ const routes: Routes = [
       {
         path: CommonRoutes.LANGUAGE,
         loadChildren: () => import('../../pages/language/language.module').then(m => m.LanguagePageModule),
-        canActivate: [PrivateGuard]
+        data: {
+          pageId: PAGE_IDS.language
+        },
+        canActivate: [PrivateGuard, AllowPageAccess],
       },
       {
         path: CommonRoutes.HELP_VIDEOS,
         loadChildren: () => import('../../pages/help-video/help-video.module').then(m => m.HelpVideoPageModule),
-        canActivate: [PrivateGuard]
+        data: {
+          pageId: PAGE_IDS.helpVideos
+        },
+        canActivate: [PrivateGuard, AllowPageAccess]
       },
       {
         path: CommonRoutes.MENTOR_QUESTIONNAIRE,
@@ -88,17 +99,26 @@ const routes: Routes = [
       {
         path: CommonRoutes.ADMIN,
         loadChildren: () => import('../../modules/admin/admin.module').then(m => m.AdminModule),
-        canActivate: [PrivateGuard]
+        data: {
+          pageId: PAGE_IDS.adminWorkspace
+        },
+        canActivate: [AllowPageAccess],
       },
       {
         path: CommonRoutes.CHANGE_PASSWORD,
         loadChildren: () => import('../../pages/change-password/change-password.module').then(m => m.ChangePasswordPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.changePassword
+        },
       },
       {
         path: CommonRoutes.LOGIN_ACTIVITY,
         loadChildren: () => import('../../pages/login-activity/login-activity.module').then(m => m.LoginActivityPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.loginActivity
+        },
       },
       {
         path: '',
