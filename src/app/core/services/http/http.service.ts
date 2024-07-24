@@ -36,7 +36,7 @@ export class HttpService {
     private alert: AlertController,
   ) {  
     this.baseUrl = window['env']['baseUrl'];
-    console.log(environment.baseUrl, this.baseUrl, "http service")
+    console.log(this.baseUrl, "http service")
   }
 
   async setHeaders() {
