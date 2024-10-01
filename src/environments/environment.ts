@@ -15,7 +15,7 @@ export const environment = {
   unauthorizedRedirectUrl: "unauthorized_redirect_url",
   password:{
     minLength:10,
-    rejectPattern:"regex for password validation",
+    regexPattern:"regex for password validation",
     errorMessage:"error message for password"
   },
 };
